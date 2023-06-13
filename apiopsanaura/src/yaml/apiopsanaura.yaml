@@ -1,0 +1,566 @@
+swagger: '2.0'
+host: HOST
+basePath: /
+schemes:
+  - https
+info:
+  title: 'APIOPSANAURA - Servizi trasversali AURA'
+  version: 0.0.2
+  description: |
+
+    # Avvertenze
+    ---
+
+
+    # Domande
+    ---
+
+    # Prototipo Interfaccia
+    ---
+    https://rn5jxm.axshare.com/#g=1&p=indice
+
+    # Note
+    ---
+
+    ## Versione 0.0.2 (22 Set 2022)
+    * Modifica API GetAssistiti (/esenzioni-patologia)
+    * Modifica API GetListaEsenzioniPatologia (/esenzioni-patologia)
+
+    ## Versione 0.0.1 (17 Giu 2022)
+    * Prima implementazione
+
+paths:
+  '/assistiti':
+    get:
+      summary: GetAssistiti
+      operationId: getAssistiti
+      description:
+        Restituisce una lista di assistiti in base ai filtri di ricerca.
+
+        * La paginazione viene effettuata tramite la query n_pagina e un header che contiene il numero totale di pagine in base ai filtri di ricerca alla paginazione "X-Total-Pages" . Sono presenti anche altri query params della request opzionali che permettono di filtrare maggiormente la lista dei risultati
+
+        * La ricerca per nome può essere effettuata solo se è presente anche il cognome
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione_codice'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/query_n_pagina'
+        - $ref: '#/parameters/query_cod_fisc_ass'
+        - $ref: '#/parameters/query_cognome_assistito'
+        - $ref: '#/parameters/query_nome_assistito'
+        - $ref: '#/parameters/query_eta_min_assistito'
+        - $ref: '#/parameters/query_eta_max_assistito'
+        - $ref: '#/parameters/query_sesso_assistito'
+        - $ref: '#/parameters/query_patologia'
+      responses:
+        '200':
+          description:
+            La lista degli assistiti
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+            X-Total-Pages:
+              type: string
+              description: Il numero di pagine totali presenti sul DB
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_assistito_ricerca'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/esenzioni-patologia':
+    get:
+      summary: GetListaEsenzioniPatologia
+      operationId: getListaEsenzioniPatologia
+      description:
+        Restituisce la lista delle esenzioni per patologia
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione_codice'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/query_tipo_esenzione'
+        - $ref: '#/parameters/query_lista_diagnosi'
+      responses:
+        '200':
+          description:
+            La lista delle esenzioni
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_codifica'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+parameters:
+  header_shib_identita_codice_fiscale:
+    in: header
+    name: Shib-Identita-CodiceFiscale
+    description: Contiene il codice fiscale dell'utente loggato ottenuto tramite shibboleth
+    type: string
+    required: true
+  header_x_request_id:
+    in: header
+    name: X-Request-Id
+    description: >-
+      Contiene un id univoco (`uuid v4`) della chiamata HTTP che viene generato
+      dal front-end, viene propagato agli strati successivi e viene restituito
+      al front-end assieme alla response, permettendo così di tracciare l'intero
+      ciclo di vita della richiesta
+    type: string
+    required: true
+  header_x_forwarded_for:
+    in: header
+    name: X-Forwarded-For
+    description: |
+      Contiene l'elenco degli ip che hanno gestito la richiesta.
+      Utile per i log e l'audit.
+      Il formato della stringa è
+      ```
+      <ip-front-end>, <ip-primo-server>, ..., <ip-ultimo-server>
+      ```
+      Es. `10.10.10.10, 10.38.45.68, 10.128.69.244`
+    type: string
+    required: true
+  header_x_codice_servizio:
+    in: header
+    name: X-Codice-Servizio
+    description: Contiene una stringa identificativa del servizio chiamante (es.COD)
+    type: string
+    required: true
+  header_x_codice_verticale:
+    in: header
+    name: X-Codice-Verticale
+    description: Contiene una stringa identificativa del verticale chiamante (es.COD)
+    type: string
+    required: true
+  path_cit_id:
+    in: path
+    name: 'id_assistito'
+    type: string
+    required: true
+    description:
+      Il codice fiscale dell'assistito
+  path_conv_id:
+    in: path
+    name: 'id_conversazione'
+    type: string
+    required: true
+    description:
+      L'id della singola conversazione
+  path_msg_id:
+    in: path
+    name: 'id_messaggio'
+    type: string
+    required: true
+    description:
+      L'id del singolo messaggio
+  path_doc_id:
+    in: path
+    name: 'id_documento'
+    type: string
+    required: true
+    description:
+      Id documento Ilec, Identificativo del documento nella componente locale
+  path_codice_documento_dipartimentale:
+    in: path
+    name: codice_documento_dipartimentale
+    type: string
+    required: true
+    description: codice documento dipartimentale
+  query_ruolo:
+    in: query
+    name: 'ruolo'
+    type: string
+    required: true
+    description:
+      Il codice del RUOLO
+  query_collocazione_codice:
+    in: query
+    name: 'collocazione_codice'
+    type: string
+    required: true
+    description:
+      Il codice della collocazione
+  query_collocazione_descrizione:
+    in: query
+    name: 'collocazione_descrizione'
+    type: string
+    required: true
+    description:
+      La descrizione della collocazione
+  query_offset:
+    in: query
+    name: 'offset'
+    type: integer
+    required: true
+    description: L'offset della paginazione
+  query_limit:
+    in: query
+    name: 'limit'
+    type: integer
+    required: true
+    description: Il numero di pagine
+  query_n_pagina:
+    in: query
+    name: 'n_pagina'
+    type: integer
+    required: true
+    description: Il numero della pagina
+  query_cod_fisc_ass:
+    in: query
+    name: 'cod_fisc_ass'
+    type: string
+    description: Il codice fiscale dell'assistito
+  query_cognome_assistito:
+    in: query
+    name: 'cognome'
+    type: string
+    description: Il cognome dell'assistito (anche parziale - min 2 caratteri)
+  query_nome_assistito:
+    in: query
+    name: 'nome'
+    type: string
+    description: Il nome dell'assistito (anche parziale - min 2 caratteri)
+  query_cf_assistito:
+    in: query
+    name: 'codice_fiscale'
+    type: string
+    description: Il codice fiscale dell'assistito
+  query_eta_min_assistito:
+    in: query
+    name: 'eta_min'
+    type: integer
+    description: L'età minima degli assistiti
+  query_eta_max_assistito:
+    in: query
+    name: 'eta_max'
+    type: integer
+    description: L'età massima degli assistiti
+  query_sesso_assistito:
+    in: query
+    name: 'sesso'
+    type: string
+    enum: [M, F]
+    description: il sesso degli assistiti
+  query_stato:
+    in: query
+    name: 'stato'
+    type: string
+    required: true
+    enum: [A, B]
+    description: |
+      Filtra assistiti per lo stato di abilitazione. Possibili valori
+      * A = assistiti abilitati
+      * B = assistiti bloccati
+  query_patologia:
+    in: query
+    name: 'esenzione_patologia'
+    type: string
+    description: Codice dell'esenzione per patologia
+  query_sola_lettura:
+    in: query
+    name: 'sola_lettura'
+    type: string
+    required: true
+    enum: [A, B, T]
+    description: |
+      Filtra conversazioni per lo stato di abilitazione. Possibili valori
+      * A = conversazioni arttive
+      * B = conversazioni bloccate (sola lettura)
+      * T = tutte le conversazioni
+  query_stringa:
+    in: query
+    name: 's'
+    type: string
+    description: la stringa della ricerca
+  query_codice_app_verticale:
+    in: query
+    name: codice_app_verticale
+    type: string
+    required: true
+    description: codice dell'applicativo verticale per il quale si esegue
+  query_pdf:
+    in: query
+    name: pdf
+    type: string
+    description: Indica se scaricare il documento o se richiedere solo i dati (json)
+  query_codice_ruolo:
+    in: query
+    name: codice_ruolo
+    type: string
+    required: true
+    description: codice ruolo medico
+  query_tipo_esenzione:
+    in: query
+    name: tipo_esenzione
+    type: string
+    description: Indica se scaricare il documento o se richiedere solo i dati (json)
+  query_lista_diagnosi:
+    in: query
+    name: lista_diagnosi
+    type: string
+    description: Indica se scaricare il documento o se richiedere solo i dati (json)
+  payload_adesione:
+    in: body
+    name: 'Payload adesione'
+    required: true
+    description: I dati che il client deve passare alle API per aderire o revocare il servizio
+    schema:
+      type: object
+      properties:
+        adesione:
+          type: boolean
+          description: true se desidera aderire, false per revocare
+        nome_medico:
+          type: string
+          description: Il nome del medico
+        cognome_medico:
+          type: string
+          description: Il cognome del medico
+      required:
+        - adesione
+  payload_notifica_lettura:
+    in: body
+    name: 'Payload notifica lettura'
+    required: true
+    description: I dati che il client deve passare alle API per aderire o revocare la notifica di lettura messaggi
+    schema:
+      type: object
+      properties:
+        notifica_lettura:
+          type: boolean
+          description: true se desidera aderire, false per revocare
+      required:
+        - notifica_lettura
+  payload_abilitazione:
+    in: body
+    name: 'Payload abilitazione'
+    required: true
+    description: I dati che il client deve passare alle API per abilitare o bloccare una lista di assistiti
+    schema:
+      type: object
+      properties:
+        abilitazione:
+          type: boolean
+          description: true per abilitare, false per bloccare
+        assistiti:
+          type: array
+          items:
+            type: string
+            description: codice fiscale dell'assistito
+        motivazione_medico:
+          type: string
+          description: La motivazione scritta dal medico quando blocca un assistito
+
+      required:
+        - abilitazione
+        - assistiti
+  payload_abilitazione_totale:
+    in: body
+    name: 'Payload abilitazione totale'
+    required: true
+    description: I dati che il client deve passare alle API per abilitare o bloccare tutti gli assistiti
+    schema:
+      type: object
+      properties:
+        abilitazione:
+          type: boolean
+          description: true per abilitare, false per bloccare
+        motivazione_medico:
+          type: string
+          description: La motivazione scritta dal medico quando blocca un assistito
+
+      required:
+        - abilitazione
+        - assistiti
+  payload_messaggio:
+    in: body
+    name: 'Payload messaggio '
+    required: true
+    description: I dati che il client deve passare alle API per creare un nuovo messaggio
+    schema:
+      type: object
+      properties:
+        testo:
+          type: string
+          description: Il testo del messaggio
+        nome_medico:
+          type: string
+          description: Il nome del medico
+        cognome_medico:
+          type: string
+          description: Il cognome del medico
+      required:
+        - testo
+  payload_messaggio_modifica:
+    in: body
+    name: 'Payload messaggio '
+    required: true
+    description: I dati che il client deve passare alle API per modificare un messaggio
+    schema:
+      type: object
+      properties:
+        testo:
+          type: string
+          description: Il testo del messaggio
+      required:
+        - testo
+responses:
+  BadRequest:
+    description:
+      La richiesta fatta dal client è errata. Ad esempio non sono stati passati
+      tutti i campi obbligatori, uno dei campi è di un tipo non valido,
+      formattazione dei filtri errata ecc.
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  Forbidden:
+    description:
+      L'utente non ha i permessi necessari per visualizzare queste risorse. <br>
+      Ad esempio un utente che sta provando ad ottenere le ricette di un altro
+      utente senza averne la delega.
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  NotFound:
+    description:
+      La risorsa cercata non è stata trovata. <br> Questo errore viene
+      restituito quando si prova ad accedere alla singola risorsa e questa non
+      esiste. <br> Nel caso in cui si prova ad ottenere una lista e non ci sono
+      elementi, restituire 200 con un array vuoto
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  InternalServerError:
+    description:
+      Si è verificato un'errore interno del server. (es. null pointer exception,
+      connessione al DB saltata ecc)
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+definitions:
+  model_assistito_ricerca:
+    title: 'Assistito'
+    type: object
+    properties:
+      nome:
+        type: string
+        description: Il nome dell'assistito
+      cognome:
+        type: string
+        description: Il cognome dell'assistito
+      codice_fiscale:
+        type: string
+        description: Il nome dell'assistito
+      data_nascita:
+        type: string
+        format: date
+        description: La data dell'ultima adesione
+        example: "1978-02-07"
+      sesso:
+        type: string
+        description: Il sesso dell'assistito
+        example: 'F'
+      codice_comune_nasc:
+        type: string
+        description: Il comune di nascita dell'assistito
+      descrizione_comune_nasc:
+        type: string
+        description: La descrizione del comune di nascita dell'assitito
+      idAura:
+        type: integer
+        format: int64
+        description: L'identificativo AURA
+  model_codifica:
+    title: 'Codifica'
+    type: object
+    properties:
+      cod_diagnosi:
+        type: string
+      cod_esenzione:
+        type: string
+      data_inizio_validita:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+      data_fine_validita:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+      desc_diagnosi:
+        type: string
+      desc_esenzione:
+        type: string
+      tipo_esenzione:
+        type: string
+  errore:
+    title: '[ERRORE] Generico'
+    type: object
+    properties:
+      status:
+        type: integer
+      code:
+        type: string
+        description: Codice univoco di errore interno
+      title:
+        type: string
+        description: Testo dell'errore da mostrare al cittadino
+      detail:
+        type: array
+        items:
+          $ref: '#/definitions/errore_dettaglio'
+      links:
+        type: array
+        items:
+          type: string
+  errore_dettaglio:
+    title: '[ERRORE] Dettaglio'
+    type: object
+    properties:
+      chiave:
+        type: string
+        description: Codice univoco di errore interno
+      valore:
+        type: string
+        description: Testo dell'errore da mostrare al cittadino

@@ -1,0 +1,167 @@
+<!--
+  - Copyright Regione Piemonte - 2023
+  - SPDX-License-Identifier: EUPL-1.2
+  -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= productName %></title>
+
+    <meta charset="utf-8" />
+    <meta name="description" content="<%= productDescription %>" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
+    />
+
+    <!-- Enforce IE-11 to use edge document mode -->
+    <!-- @see https://stackoverflow.com/questions/6771258/what-does-meta-http-equiv-x-ua-compatible-content-ie-edge-do -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="stylesheet" href="outdated-browser-rework.min.css" />
+
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="pwa-icons/favicon-128x128.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="pwa-icons/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="pwa-icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="pwa-icons/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/ico"
+      href="pwa-icons/favicon.ico"
+    />
+    <!-- iPhone XR -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-828x1792.png"
+    />
+    <!-- iPhone X, XS -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      href="pwa-icons/apple-launch-1125x2436.png"
+    />
+    <!-- iPhone XS Max -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      href="pwa-icons/apple-launch-1242x2688.png"
+    />
+    <!-- iPhone 8, 7, 6s, 6 -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-750x1334.png"
+    />
+    <!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
+      href="pwa-icons/apple-launch-1242x2208.png"
+    />
+    <!-- iPhone 5 -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-640x1136.png"
+    />
+    <!-- iPad Mini, Air, 9.7" -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-1536x2048.png"
+    />
+    <!-- iPad Pro 10.5" -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-1668x2224.png"
+    />
+    <!-- iPad Pro 11" -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-1668x2388.png"
+    />
+    <!-- iPad Pro 12.9" -->
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      href="pwa-icons/apple-launch-2048x2732.png"
+    />
+
+    <!-- APPLE -->
+    <link rel="apple-touch-icon" href=pwa-icons/apple-icon-120x120.png>
+    <link rel="apple-touch-icon" sizes=180x180 href=pwa-icons/apple-icon-180x180.png>
+    <link rel="apple-touch-icon" sizes=167x167 href=pwa-icons/apple-icon-167x167.png>
+
+  </head>
+  <body>
+    <!-- DO NOT touch the following DIV -->
+    <div id="q-app"></div>
+
+    <!-- GESTIONE BROWSER OBSOLETI -->
+    <div id="outdated"></div>
+
+    <script src="outdated-browser-rework.min.js"></script>
+    <script>
+      outdatedBrowserRework({
+        fullscreen: false,
+        backgroundColor: '#006CB4',
+        textColor: '#FFFFFF',
+        requiredCssProperty: false, // es. 'borderImage'
+        requireChromeOnAndroid: true,
+        isUnknownBrowserOK: false,
+        // Questi valori possiamo copiarli dall'output della build di Quasar
+        browserSupport: {
+          Chrome: 75,
+          Edge: 80,
+          Firefox: 71,
+          IE: 11,
+          Opera: 65,
+          Safari: 10.1
+        },
+        messages: {
+          it: {
+            outOfDate: "Il tuo browser Ã¨ obsoleto",
+            unsupported: "Il tuo browser non Ã¨ supportato",
+            update: {
+              web: "Aggiorna il browser per una migliore esperienza d'uso"
+            },
+            // You can set the URL to null if you do not want a clickable link or provide
+            // your own markup in the `update.web` message.
+            url: "http://outdatedbrowser.com/",
+            callToAction: "Aggiorna il mio browser",
+            close: "Chiudi"
+          }
+        }
+      });
+    </script>
+
+
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:sec="http://cxf.apache.org/configuration/security" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd						   http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd						   http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd						   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd						   http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd">
+    <!-- the client bean -->
+<!--     <bean id="delegheCittadiniService" class="it.csi.deleghe.deleghebe.ws.DelegheCittadiniService" factory-bean="cxfdelegheCittadiniSecuredClientFactory" factory-method="create" /> and its factory -->
+<!--     <bean id="cxfdelegheCittadiniSecuredClientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"> -->
+<!--         <property name="serviceClass" value="it.csi.deleghe.deleghebe.ws.DelegheCittadiniService" /> -->
+<!-- 		<property name="address" value="@@@delegheServiceeUrl@@@" /> -->
+<!-- 		<property name="username" value="@@@delegheUserBe@@@" /> -->
+<!-- 		<property name="password" value="@@@deleghePassBe@@@" /> -->
+<!--         <property name="inInterceptors"> -->
+<!--             <list> -->
+<!--                 <ref bean="logIn" /> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--         <property name="outInterceptors"> -->
+<!--             <list> -->
+<!--                 <ref bean="logOut" /> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+<!--     <bean id="logIn" class="org.apache.cxf.interceptor.LoggingInInterceptor" /> -->
+<!--     <bean id="logOut" class="org.apache.cxf.interceptor.LoggingOutInterceptor" /> ATTENZIONE: conmfigurazione da non mettere in esercizio 	     serve solo per gli ambienti con certificati con CN	     non concordante con il nome server -->
+</beans>

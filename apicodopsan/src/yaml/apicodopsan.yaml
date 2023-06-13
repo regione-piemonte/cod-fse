@@ -1,0 +1,1305 @@
+swagger: '2.0'
+host: HOST
+basePath: /apicodopsan/api/v1
+schemes:
+  - https
+info:
+  title: 'Contatto Digitale - [Medico]'
+  version: 0.0.19
+  description: |
+
+    # Avvertenze
+    ---
+
+
+    # Domande
+    ---
+
+    # Prototipo Interfaccia
+    ---
+    https://rn5jxm.axshare.com/#g=1&p=indice
+
+    # Note
+    ---
+     ## Versione 0.0.19
+      * Aggiunti query param collocazione codice e descrizione alla verifica allegato
+     ## Versione 0.0.18
+      * modificati Gestione assistiti e Abilita/blocca tutti: aggiunto in risposta un array di assistiti per i quali saranno valorizzati solo codice fiscale e lo stato di abilitazione.
+      * Aggiunta risorsa verifica allegato
+     ## Versione 0.0.17 (13 Set 2022)
+      * aggiunta query_conversazione su get conversazioni
+     ## Versione 0.0.16 (06 Set 2022)
+      * aggiunta data_eliminazione su get conversazioni
+  
+     ## Versione 0.0.15 (06 Set 2022)
+      * modificata risorsa lettura messaggio
+      
+    ## Versione 0.0.14 (31 Ago 2022)
+      * modifica formato date a date-time
+
+    ## Versione 0.0.13 (29 Ago 2022)
+      * nuovo campo motivazione medico
+
+    ## Versione 0.0.12 (7 Lug 2022)
+      * Motivo_blocco codice diventa string
+
+    ## Versione 0.0.11 (6 Lug 2022)
+      * Aggiunto X-Codice-Verticale su tutti gli endpoint
+
+    ## Versione 0.0.10 (4 Lug 2022)
+      * Tolto data_notifica_pacs
+
+    ## Versione 0.0.9 (20 Giu 2022)
+     *aggiunta query collocazione_descrizione su tutti gli endpoint
+
+    ## Versione 0.0.8 (17 Giu 2022)
+     * Tolti endpoint `cerca pazienti` e `esenzioni per patologie`
+
+    ## Versione 0.0.7 (14 Giu 2022)
+     * Nuovo filtro `n_pagina` e header `X-Total-Pages` su endpoint Cerca assistiti
+
+    ## Versione 0.0.6 (10 Giu 2022)
+    * Aggiunti campi  `modificato`, `data_modifica` e `autore_modifica` su model ultimo messaggio
+
+    ## Versione 0.0.5 (03 Giu 2022)
+    * Tolti endpoint per recupero documenti (già presenti nel fse del medico)
+    * Aggiunto campo `abilitazione_assistiti` a endpoint info medico
+
+    ## Versione 0.0.4 (26 Mag 2022)
+    * Tolto nome e cognome autore dal model messaggio
+    * Tolto campo categoria_tipologia dal model documento
+    * Aggiunto nome e cognome medico su adesione
+    * Aggiunte query ruolo e query collocazione
+
+    ## Versione 0.0.3 (25 Mag 2022)
+    * Modifica response "adesione/revoca"
+
+    ## Versione 0.0.2 (20 Mag 2022)
+    * Aggiornati dati allegati
+
+    *Aggiunto campo `modificato`, `data_modifica` e `autore_modifica` su model messaggio
+
+    ## Versione 0.0.1 (10 Mag 2022)
+    * Prima implementazione
+
+paths:
+  '/info':
+    get:
+      summary: Info medico
+      description:
+        Restituisce le inofrmazioni del medico sul servizio Contatto Digitale
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+
+      responses:
+        '200':
+          description:
+             Restituisce le informazioni del medico
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+              $ref: '#/definitions/model_medico_info'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '404':
+          $ref: '#/responses/NotFound'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/adesione':
+    post:
+      summary: Adesione/revoca
+      description:
+        Consente a un medico di aderire o revocare al servizio Contatto digitale
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/payload_adesione'
+
+
+      responses:
+        '200':
+          description:
+             Operazione effettuata con successo
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+              $ref: '#/definitions/model_adesione'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/notifica-lettura':
+    put:
+      summary: Notifica lettura messaggi
+      description:
+        Consente di abilitare/disabilitare la notifica di lettura dei messaggi degli assistiti
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/payload_notifica_lettura'
+
+
+      responses:
+        '200':
+          description:
+             Operazione eseguita con successo
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/assistiti':
+    get:
+      summary: Lista assistiti (bloccati/abilitati)
+      description:
+        Restituisce la lista degli assistiti abilitati o bloccati associati al medico
+        Il front-end può richiedere la paginazione dei risultati per evitare di mostrare troppi risultati a schermo.
+        La paginazione viene effettuata tramite i due query params opzionali della request "limit" ed "offset" e 1 header che contiene il numero totale di elementi in base ai filtri di ricerca alla paginazione "X-Total-Elements"
+        Sono presenti anche altri query params della request opzionali che permettono di filtrare maggiormente la lista dei risultati
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/query_limit'
+        - $ref: '#/parameters/query_offset'
+        - $ref: '#/parameters/query_cognome_assistito'
+        - $ref: '#/parameters/query_nome_assistito'
+        - $ref: '#/parameters/query_cf_assistito'
+        - $ref: '#/parameters/query_eta_min_assistito'
+        - $ref: '#/parameters/query_eta_max_assistito'
+        - $ref: '#/parameters/query_sesso_assistito'
+        - $ref: '#/parameters/query_stato'
+      responses:
+        '200':
+          description:
+            La lista degli assistiti
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+            X-Total-Elements:
+              description: Il numero di elementi totali presenti sul DB (Es. 1200)
+              type: integer
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_assistito'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    post:
+      summary: Gestione assistiti
+      description:
+       Consente di abilitare/bloccare una lista di assistiti; restituisce un array di assistiti per i quali sarà valorizzato solo il cf e lo stato abilitazione
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/payload_abilitazione'
+      responses:
+        '200':
+          description:
+            OK
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_assistito'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/assistiti/tutti':
+    post:
+      summary: Abilita/blocca tutti
+      description:
+        Consente di abilitare/bloccare tutti gli assistiti restituisce un array di assistiti per i quali sarà valorizzato solo il cf e lo stato abilitazione
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/payload_abilitazione_totale'
+      responses:
+        '200':
+          description:
+            OK
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_assistito'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/documenti/{id_documento}/verifica-allegato':
+    get:
+      summary: Verifica allegato
+      description:
+        Verifica che esista un documento allegato dal cittadino per il medico sul messaggio di una conversazione. Se esist ritorna status 200 altrimenti ritorna status 403
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'      
+        - $ref: '#/parameters/path_doc_id'
+        - $ref: '#/parameters/query_ruolo'        
+        - $ref: '#/parameters/query_cf_assistito'
+        - $ref: '#/parameters/query_cod_cl'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'        
+      responses:
+        '200':
+          description:
+            OK
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'        
+  '/conversazioni':
+    get:
+      summary: Lista conversazioni
+      description:
+        Restituisce la lista delle conversazioni
+        Il front-end può richiedere la paginazione dei risultati per evitare di mostrare troppi risultati a schermo.
+        La paginazione viene effettuata tramite i due query params opzionali della request "limit" ed "offset"  e 1 header che contiene il numero totale di elementi in base ai filtri di ricerca alla paginazione "X-Total-Elements"
+        Sono presenti anche altri query params della request opzionali che permettono di filtrare maggiormente la lista dei risultati
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/query_limit'
+        - $ref: '#/parameters/query_offset'
+        - $ref: '#/parameters/query_sola_lettura'
+        - $ref: '#/parameters/query_cognome_assistito'
+        - $ref: '#/parameters/query_cf_assistito'
+        - $ref: '#/parameters/query_conversazione'
+
+      responses:
+        '200':
+          description:
+             La lista delle conversazioni
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+            X-Total-Elements:
+              description: Il numero di elementi totali presenti sul DB (Es. 1200)
+              type: integer
+
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_conversazione'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/conversazioni/{id_conversazione}/messaggi':
+    get:
+      summary: Lista messaggi
+      description:
+        Restituisce la lista dei messaggi di una conversazione
+        Il front-end può richiedere la paginazione dei risultati per evitare di mostrare troppi risultati a schermo.
+        La paginazione viene effettuata tramite i due query params opzionali della request "limit" ed "offset"  e 1 header che contiene il numero totale di elementi in base ai filtri di ricerca alla paginazione "X-Total-Elements"
+
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/path_conv_id'
+        - $ref: '#/parameters/query_limit'
+        - $ref: '#/parameters/query_offset'
+
+      responses:
+        '200':
+          description:
+             La lista dei messaggi
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+            X-Total-Elements:
+              description: Il numero di elementi totali presenti sul DB (Es. 1200)
+              type: integer
+
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/model_messaggio'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    post:
+      summary: Nuovo messaggio
+      description:
+       Permette al medico di aggiungere un nuovo messaggio sulla conversazione
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/path_conv_id'
+        - $ref: '#/parameters/payload_messaggio'
+
+      responses:
+        '200':
+          description:
+            Il dettaglio del messaggio
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+            $ref: '#/definitions/model_messaggio_nuovo'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/conversazioni/{id_conversazione}/messaggi/{id_messaggio}':
+    put:
+      summary:  Modifica messaggio
+      description:
+          Modifica un messaggio
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/path_conv_id'
+        - $ref: '#/parameters/path_msg_id'
+        - $ref: '#/parameters/payload_messaggio_modifica'
+      responses:
+        '200':
+          description:
+            Il dettaglio del messaggio
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+          schema:
+            $ref: '#/definitions/model_messaggio_nuovo'
+
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  '/conversazioni/{id_conversazione}/messaggi/{id_messaggio}/letto':
+    put:
+      summary: Lettura messaggio
+      description:
+        Imposta un messaggio come letto
+
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/header_shib_identita_codice_fiscale'
+        - $ref: '#/parameters/header_x_request_id'
+        - $ref: '#/parameters/header_x_forwarded_for'
+        - $ref: '#/parameters/header_x_codice_servizio'
+        - $ref: '#/parameters/header_x_codice_verticale'
+        - $ref: '#/parameters/query_ruolo'
+        - $ref: '#/parameters/query_collocazione'
+        - $ref: '#/parameters/query_collocazione_descrizione'
+        - $ref: '#/parameters/path_conv_id'
+        - $ref: '#/parameters/path_msg_id'
+      responses:
+        '200':
+          description:
+             Operazione effettuata con successo
+          headers:
+            X-Request-ID:
+              type: string
+              description: Ritorno del parametro ricevuto nella request.
+
+        '400':
+          $ref: '#/responses/BadRequest'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '500':
+          $ref: '#/responses/InternalServerError'
+parameters:
+  header_shib_identita_codice_fiscale:
+    in: header
+    name: Shib-Identita-CodiceFiscale
+    description: Contiene il codice fiscale dell'utente loggato ottenuto tramite shibboleth
+    type: string
+    required: true
+  header_x_request_id:
+    in: header
+    name: X-Request-Id
+    description: >-
+      Contiene un id univoco (`uuid v4`) della chiamata HTTP che viene generato
+      dal front-end, viene propagato agli strati successivi e viene restituito
+      al front-end assieme alla response, permettendo così di tracciare l'intero
+      ciclo di vita della richiesta
+    type: string
+    required: true
+  header_x_forwarded_for:
+    in: header
+    name: X-Forwarded-For
+    description: |
+      Contiene l'elenco degli ip che hanno gestito la richiesta.
+      Utile per i log e l'audit.
+      Il formato della stringa è
+      ```
+      <ip-front-end>, <ip-primo-server>, ..., <ip-ultimo-server>
+      ```
+      Es. `10.10.10.10, 10.38.45.68, 10.128.69.244`
+    type: string
+    required: true
+  header_x_codice_servizio:
+    in: header
+    name: X-Codice-Servizio
+    description: Contiene una stringa identificativa del servizio chiamante (es.COD)
+    type: string
+    required: true
+  header_x_codice_verticale:
+    in: header
+    name: X-Codice-Verticale
+    description: Contiene una stringa identificativa del verticale chiamante (es.COD)
+    type: string
+    required: true
+  path_cit_id:
+    in: path
+    name: 'id_assistito'
+    type: string
+    required: true
+    description:
+      Il codice fiscale dell'assistito
+  path_conv_id:
+    in: path
+    name: 'id_conversazione'
+    type: string
+    required: true
+    description:
+      L'id della singola conversazione
+  path_msg_id:
+    in: path
+    name: 'id_messaggio'
+    type: string
+    required: true
+    description:
+      L'id del singolo messaggio
+  path_doc_id:
+    in: path
+    name: 'id_documento'
+    type: string
+    required: true
+    description:
+      Id documento Ilec, Identificativo del documento nella componente locale
+  path_codice_documento_dipartimentale:
+    in: path
+    name: codice_documento_dipartimentale
+    type: string
+    required: true
+    description: codice documento dipartimentale
+  query_ruolo:
+    in: query
+    name: 'ruolo'
+    type: string
+    required: true
+    description:
+      Il codice del RUOLO
+  query_collocazione:
+    in: query
+    name: 'collocazione_codice'
+    type: string
+    required: true
+    description:
+      Il codice della collocazione
+  query_collocazione_descrizione:
+    in: query
+    name: 'collocazione_descrizione'
+    type: string
+    required: true
+    description:
+      La descrizione della collocazione
+  query_offset:
+    in: query
+    name: 'offset'
+    type: integer
+    required: true
+    description: L'offset della paginazione
+  query_limit:
+    in: query
+    name: 'limit'
+    type: integer
+    required: true
+    description: Il numero di pagine
+  query_n_pagina:
+    in: query
+    name: 'n_pagina'
+    type: integer
+    required: true
+    description: Il numero delal pagina
+  query_cognome_assistito:
+    in: query
+    name: 'cognome'
+    type: string
+    description: Il cognome dell'assistito (anche parziale - min 2 caratteri)
+  query_nome_assistito:
+    in: query
+    name: 'nome'
+    type: string
+    description: Il nome dell'assistito (anche parziale - min 2 caratteri)
+  query_cf_assistito:
+    in: query
+    name: 'codice_fiscale'
+    type: string
+    description: Il codice fiscale dell'assistito
+  query_eta_min_assistito:
+    in: query
+    name: 'eta_min'
+    type: integer
+    description: L'età minima degli assistiti
+  query_eta_max_assistito:
+    in: query
+    name: 'eta_max'
+    type: integer
+    description: L'età massima degli assistiti
+  query_sesso_assistito:
+    in: query
+    name: 'sesso'
+    type: string
+    enum: [M, F]
+    description: il sesso degli assistiti
+  query_stato:
+    in: query
+    name: 'stato'
+    type: string
+    required: true
+    enum: [A, B]
+    description: |
+      Filtra assistiti per lo stato di abilitazione. Possibili valori
+      * A = assistiti abilitati
+      * B = assistiti bloccati
+  query_patologia:
+    in: query
+    name: 'esenzione_patologia'
+    type: string
+    description: Codice dell'esenzione per patologia
+  query_conversazione:
+    in: query
+    name: 'id_conversazione'
+    type: string
+    description:
+      L'id della conversazione
+  query_sola_lettura:
+    in: query
+    name: 'sola_lettura'
+    type: string
+    required: true
+    enum: [A, B, T]
+    description: |
+      Filtra conversazioni per lo stato di abilitazione. Possibili valori
+      * A = conversazioni arttive
+      * B = conversazioni bloccate (sola lettura)
+      * T = tutte le conversazioni
+  query_stringa:
+    in: query
+    name: 's'
+    type: string
+    description: la stringa della ricerca
+
+  query_codice_app_verticale:
+    in: query
+    name: codice_app_verticale
+    type: string
+    required: true
+    description: codice dell'applicativo verticale per il quale si esegue
+  query_pdf:
+    in: query
+    name: pdf
+    type: string
+    description: Indica se scaricare il documento o se richiedere solo i dati (json)
+  query_codice_ruolo:
+    in: query
+    name: codice_ruolo
+    type: string
+    required: true
+    description: codice ruolo medico
+  query_cod_cl:
+    in: query
+    name: cod_cl
+    type: string
+    description: codece della cl
+  payload_adesione:
+    in: body
+    name: 'Payload adesione'
+    required: true
+    description: I dati che il client deve passare alle API per aderire o revocare il servizio
+    schema:
+      type: object
+      properties:
+        adesione:
+          type: boolean
+          description: true se desidera aderire, false per revocare
+        nome_medico:
+          type: string
+          description: Il nome del medico
+        cognome_medico:
+          type: string
+          description: Il cognome del medico
+      required:
+        - adesione
+  payload_notifica_lettura:
+    in: body
+    name: 'Payload notifica lettura'
+    required: true
+    description: I dati che il client deve passare alle API per aderire o revocare la notifica di lettura messaggi
+    schema:
+      type: object
+      properties:
+        notifica_lettura:
+          type: boolean
+          description: true se desidera aderire, false per revocare
+      required:
+        - notifica_lettura
+  payload_abilitazione:
+    in: body
+    name: 'Payload abilitazione'
+    required: true
+    description: I dati che il client deve passare alle API per abilitare o bloccare una lista di assistiti
+    schema:
+      type: object
+      properties:
+        abilitazione:
+          type: boolean
+          description: true per abilitare, false per bloccare
+        assistiti:
+          type: array
+          items:
+            type: string
+            description: codice fiscale dell'assistito
+        motivazione_medico:
+          type: string
+          description: La motivazione scritta dal medico quando blocca un assistito
+
+      required:
+        - abilitazione
+        - assistiti
+  payload_abilitazione_totale:
+    in: body
+    name: 'Payload abilitazione totale'
+    required: true
+    description: I dati che il client deve passare alle API per abilitare o bloccare tutti gli assistiti
+    schema:
+      type: object
+      properties:
+        abilitazione:
+          type: boolean
+          description: true per abilitare, false per bloccare
+        motivazione_medico:
+          type: string
+          description: La motivazione scritta dal medico quando blocca un assistito
+
+      required:
+        - abilitazione
+        - assistiti
+  payload_messaggio:
+    in: body
+    name: 'Payload messaggio '
+    required: true
+    description: I dati che il client deve passare alle API per creare un nuovo messaggio
+    schema:
+      type: object
+      properties:
+        testo:
+          type: string
+          description: Il testo del messaggio
+        nome_medico:
+          type: string
+          description: Il nome del medico
+        cognome_medico:
+          type: string
+          description: Il cognome del medico
+      required:
+        - testo
+  payload_messaggio_modifica:
+    in: body
+    name: 'Payload messaggio '
+    required: true
+    description: I dati che il client deve passare alle API per modificare un messaggio
+    schema:
+      type: object
+      properties:
+        testo:
+          type: string
+          description: Il testo del messaggio
+      required:
+        - testo
+responses:
+  BadRequest:
+    description:
+      La richiesta fatta dal client è errata. Ad esempio non sono stati passati
+      tutti i campi obbligatori, uno dei campi è di un tipo non valido,
+      formattazione dei filtri errata ecc.
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  Forbidden:
+    description:
+      L'utente non ha i permessi necessari per visualizzare queste risorse. <br>
+      Ad esempio un utente che sta provando ad ottenere le ricette di un altro
+      utente senza averne la delega.
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  NotFound:
+    description:
+      La risorsa cercata non è stata trovata. <br> Questo errore viene
+      restituito quando si prova ad accedere alla singola risorsa e questa non
+      esiste. <br> Nel caso in cui si prova ad ottenere una lista e non ci sono
+      elementi, restituire 200 con un array vuoto
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+  InternalServerError:
+    description:
+      Si è verificato un'errore interno del server. (es. null pointer exception,
+      connessione al DB saltata ecc)
+    headers:
+      X-Request-ID:
+        type: string
+        description: Ritorno del parametro ricevuto nella request.
+    schema:
+      $ref: '#/definitions/errore'
+definitions:
+  model_medico_info:
+    title: 'Info medico'
+    type: object
+    properties:
+      data_inizio_adesione:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+        example: "2020-02-07T14:14:39.420Z"
+      data_fine_adesione:
+        type: string
+        format: date-time
+        description: La data della revoca al servizio.
+        example: null
+      notifica_lettura_messaggi:
+        type: boolean
+        description: Indica se i pazienti possono visualizzare lo stato della lettura dei messaggi inviati al medico
+        example: false
+      n_pazienti_abilitati:
+        type: integer
+        description: Il numero di pazienti abilitati
+        example: 100
+      n_pazienti_bloccati:
+        type: integer
+        description: Il numero di pazienti bloccati
+        example: 50
+      abilitazione_assistiti:
+        type: boolean
+        description: Indica se è in corso una richiesta di abilitazione tutti gli assistiti
+        example: true
+  model_adesione:
+    title: 'Info adesione'
+    type: object
+    properties:
+      data_inizio_adesione:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+        example: "2020-02-07T14:14:39.420Z"
+      data_fine_adesione:
+        type: string
+        format: date-time
+        description: La data della revoca al servizio.
+        example: null
+  model_assistito:
+    title: 'Assistito'
+    type: object
+    properties:
+      nome:
+        type: string
+        description: Il nome dell'assistito
+      cognome:
+        type: string
+        description: Il cognome dell'assistito
+      codice_fiscale:
+        type: string
+        description: Il nome dell'assistito
+      data_nascita:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+        example: "1978-02-07"
+      sesso:
+        type: string
+        description: Il sesso dell'assistito
+        example: 'F'
+      stato_abilitazione:
+        type: string
+        description: |
+          Indica se un assistito. Possibili valori
+          * A = assistito è abilitato
+          * B = assistito è bloccato
+          * N = assistito senza stato
+        example: 'A'
+      motivo_blocco:
+        $ref: '#/definitions/model_motivo_blocco'
+      motivazione_medico:
+        type: string
+        description: La motivazione scritta dal medico quando blocca un assistito
+  model_assistito_ricerca:
+    title: 'Assistito'
+    type: object
+    properties:
+      nome:
+        type: string
+        description: Il nome dell'assistito
+      cognome:
+        type: string
+        description: Il cognome dell'assistito
+      codice_fiscale:
+        type: string
+        description: Il nome dell'assistito
+      data_nascita:
+        type: string
+        format: date-time
+        description: La data dell'ultima adesione
+        example: "1978-02-07"
+      sesso:
+        type: string
+        description: Il sesso dell'assistito
+        example: 'F'
+  model_medico:
+    title: 'Medico'
+    type: object
+    properties:
+      nome:
+        type: string
+        description: nome del medico
+        example: 'Mario'
+      cognome:
+        type: string
+        description: cognome del medico
+        example: 'Rossi'
+      codice_fiscale:
+        type: string
+        description: codice fiscale del medico
+  model_accession_number:
+    title: 'AccessionNumber'
+    type: object
+    properties:
+      accession_number:
+        type: string
+      data_notifica_pacs:
+        type: string
+        format: date-time
+  model_documento:
+    title: 'Documento'
+    type: object
+    properties:
+      id_documento_ilec:
+        type: string
+        description: id del documento
+      codice_cl:
+        type: string
+        description: codice della componente locale
+      azienda:
+        $ref: '#/definitions/model_codifica'
+      descrizione_struttura:
+        type: string
+        description: descrizione della struttura
+      data_validazione:
+        type: string
+        format: date-time
+      tipo_documento:
+        $ref: '#/definitions/model_codifica'
+      tipo_contributo:
+        type: string
+        description:  Se il documento è autocontribuito può valere TRASCRIZIONE o ALLEGATO (nel primo caso bisogna far vedere il testo nel secodo trattasi di un pdf), altrimenti viene restituito null
+      id_episodio:
+        type: number
+      codice_documento_dipartimentale:
+        type: string
+        description: Codice che identifica il documento all'interno dell'ASR.
+      id_repository_cl:
+        type: string
+      categoria_tipologia:
+        type: string
+        description: |
+          categoria del documento. Possibili valori
+          * FSE
+          * PERSONALE
+        example: 'FSE'
+      accession_numbers:
+        type: array
+        items:
+          type: string
+  model_messaggio:
+    title: 'Messaggio'
+    type: object
+    properties:
+      id:
+        type: string
+        description: Identificativo univoco
+        example: '12'
+      data_creazione:
+        type: string
+        format: date-time
+        description: La data in cui è stato mandato il messaggio
+        example: "2020-02-07T14:14:39.420Z"
+      letto:
+        type: boolean
+        description: Indica se il messaggio è stato letto dal destinatario
+      data_lettura:
+        type: string
+        format: date-time
+        description: La data in cui il messaggio è stato letto dal destinatario
+        example: "2020-02-07T15:14:39.420Z"
+      testo:
+        type: string
+        description: Il testo del messaggio
+        example: "Ho allegato il referto"
+      modificabile:
+        type: boolean
+        description: Indica se il messaggio è modificabile
+      modificato:
+        type: boolean
+        description: Indica se il messaggio è stato modificato
+      autore:
+        $ref: '#/definitions/model_autore'
+      autore_modifica:
+        type: string
+        description: Il cf dell'autore della modifica
+        example: "CF"
+      data_modifica:
+        type: string
+        format: date-time
+        description: La data in cui il messaggio è stato modificato
+        example: "2020-02-07T14:14:39.420Z"
+      allegati:
+        type: array
+        items:
+          $ref: '#/definitions/model_documento'
+  model_messaggio_nuovo:
+    title: 'Messaggio nuovo'
+    type: object
+    properties:
+      id:
+        type: string
+        description: Identificativo univoco
+        example: '12'
+      data_creazione:
+        type: string
+        format: date-time
+        description: La data in cui è stato mandato il messaggio
+        example: "2020-02-07T14:14:39.420Z"
+      testo:
+        type: string
+        description: Il testo del messaggio
+        example: "Ho allegato il referto"
+      modificabile:
+        type: boolean
+        description: Indica se il messaggio è modificabile
+      modificato:
+        type: boolean
+        description: Indica se il messaggio è stato modificato
+      data_modifica:
+        type: string
+        format: date-time
+        description: La data in cui il messaggio è stato modificato
+        example: "2020-02-07T14:14:39.420Z"
+  model_ultimo_messaggio:
+    title: 'Ultimo messaggio'
+    type: object
+    properties:
+      id:
+        type: string
+        description: Identificativo univoco
+        example: '12'
+      data_creazione:
+        type: string
+        format: date-time
+        description: La data in cui è stato mandato il messaggio
+        example: "2020-02-07T14:14:39.420Z"
+      letto:
+        type: boolean
+        description: Indica se il messaggio è stato letto dal destinatario
+      data_lettura:
+        type: string
+        format: date-time
+        description: La data in cui il messaggio è stato letto dal destinatario
+        example: "2020-02-07T15:14:39.420Z"
+      testo:
+        type: string
+        description: Il testo del messaggio
+        example: "Ho allegato il referto"
+      autore:
+        $ref: '#/definitions/model_autore'
+      modificato:
+        type: boolean
+        description: Indica se il messaggio è stato modificato
+      autore_modifica:
+        type: string
+        description: Il cf dell'autore della modifica
+        example: "CF"
+      data_modifica:
+          type: string
+          format: date-time
+          description: La data in cui il messaggio è stato modificato
+          example: "2020-02-07T14:14:39.420Z"
+  model_motivo_blocco:
+    title: 'Motivo blocco'
+    type: object
+    properties:
+      codice:
+        type: string
+        description: codice del motivo del blocco
+      descrizione:
+        type: string
+        description: descrizione del motivo del blocco
+  model_codifica:
+    title: 'Codifica'
+    type: object
+    properties:
+      codice:
+        type: string
+        description: codice della codifica
+      descrizione:
+        type: string
+        description: descrizione della codifica
+  model_conversazione:
+    title: Conversazione
+    description: Rappresenta la convesazione
+    type: object
+    properties:
+      id:
+        type: string
+        description: Identificativo univoco
+        example: '12'
+      medico:
+        $ref: '#/definitions/model_medico'
+      argomento:
+        type: string
+        description: L'argomento della conversazione
+        example: "Dolore al ginocchio"
+      n_messaggi_non_letti:
+        type: integer
+        description: Il numero dei messaggi ancora non letti della conversazione
+        example: 2
+      sola_lettura:
+        type: boolean
+        description: Indica se la conversazione è in sola lettura
+        example: false
+      ultimo_messaggio:
+        $ref: '#/definitions/model_ultimo_messaggio'
+      data_creazione:
+        type: string
+        format: date-time
+        description: La data in cui è stata creata la conversazione
+        example: "2020-02-07T14:14:39.420Z"
+      data_eliminazione:
+        type: string
+        format: date-time
+        description: La data in cui verr� eliminata la conversazione
+        example: "2020-02-07T14:14:39.420Z"
+      motivo_blocco:
+        $ref: '#/definitions/model_motivo_blocco'
+      motivazione_medico:
+        type: string
+        description: La motivazione scritta dal medico quando blocca un assistito
+      autore:
+        $ref: '#/definitions/model_autore'
+      assistito:
+        $ref: '#/definitions/model_assistito_messaggio'
+  model_assistito_messaggio:
+    title: Assistito
+    description: L'autore della conversazione o messaggio
+    type: object
+    properties:
+      nome:
+        type: string
+        description: Il nome dell'autore
+      cognome:
+        type: string
+        description: Il cognome dell'autore
+      codice_fiscale:
+        type: string
+        description: Il codice fiscale dell'autore
+  model_autore:
+    title: Autore
+    description: L'autore della conversazione o messaggio
+    type: object
+    properties:
+
+      codice_fiscale:
+        type: string
+        description: Il codice fiscale dell'autore
+      tipo:
+        type: string
+        enum:
+          - assistito
+          - delegato
+          - medico
+        description: Indica il tipo di autore
+        example: "assistito"
+  errore:
+    title: '[ERRORE] Generico'
+    type: object
+    properties:
+      status:
+        type: integer
+      code:
+        type: string
+        description: Codice univoco di errore interno
+      title:
+        type: string
+        description: Testo dell'errore da mostrare al cittadino
+      detail:
+        type: array
+        items:
+          $ref: '#/definitions/errore_dettaglio'
+      links:
+        type: array
+        items:
+          type: string
+  errore_dettaglio:
+    title: '[ERRORE] Dettaglio'
+    type: object
+    properties:
+      chiave:
+        type: string
+        description: Codice univoco di errore interno
+      valore:
+        type: string
+        description: Testo dell'errore da mostrare al cittadino

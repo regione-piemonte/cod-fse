@@ -1,0 +1,56 @@
+{
+  "name": "csi-cod-fe",
+  "version": "0.0.1",
+  "description": "",
+  "productName": "Contatto Digitale | Salute Piemonte",
+  "author": "Vanessa Libora <vanessaalexandra.libora@consulenti.csi.it>",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env ENV=dev quasar dev",
+    "build:test": "cross-env ENV=test quasar build -c",
+    "build:alpha-cert": "cross-env ENV=alpha-cert quasar build -c",
+    "build:prod": "cross-env ENV=prod quasar build -c",
+    "bom": "npx npm-license-crawler --onlyDirectDependencies --prooduction --csv bom.csv --yes && node bom-cleaner.js",
+    "lint": "eslint --ext .js,.vue ./",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.6.9",
+    "@firebase/messaging": "^0.6.21",
+    "@quasar/extras": "^1.9.5",
+    "axios": "^0.21.1",
+    "axios-mock-adapter": "^1.18.2",
+    "change-case": "^4.1.2",
+    "core-js": "^3.6.5",
+    "faker": "^5.1.0",
+    "file-saver": "^2.0.5",
+    "quasar": "^1.19.1",
+    "vue-sync": "^3.2.0"
+  },
+  "devDependencies": {
+    "@quasar/app": "^2.1.14",
+    "babel-eslint": "^10.0.1",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-vue": "^6.1.2"
+  },
+  "browserslist": [
+    "ie >= 11",
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}
