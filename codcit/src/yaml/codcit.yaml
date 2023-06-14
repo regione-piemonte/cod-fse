@@ -1,61 +1,11 @@
 swagger: '2.0'
 host: HOST
-basePath: /apisancod/api/v1
+basePath: /codcit/api/v1
 schemes:
   - https
 info:
   title: 'Contatto Digitale - [Cittadino]'
-  version: 0.0.11
-  description: |
-
-    # Avvertenze
-    ---
-
-
-    # Domande
-    ---
-
-
-    # Prototipo Interfaccia
-    ---
-    https://rn5jxm.axshare.com/#g=1&p=indice
-
-
-    # Note
-    ---
-    ## Versione 0.0.11 (06 Set 2022)
-      * modificata risorsa lettura messaggio
-      * aggiunto data_eliminazione in model_conversazione
-      
-    ## Versione 0.0.10 (19 Lug 2022)
-      * tolto cognome e nome autore
-
-    ## Versione 0.0.9 (7 Lug 2022)
-     * Motivo_blocco codice diventa string
-
-    ## Versione 0.0.8 (4 Lug 2022)
-     * Modifica lista accession_numbers
-
-    ## Versione 0.0.7 (10 Giu 2022)
-    * Aggiunti campi  `modificato`, `data_modifica` e `autore_modifica` su model ultimo messaggio
-
-    ## Versione 0.0.6 (03 Giu 2022)
-    * Aggunto endpoint verifica abilitazione
-
-    ## Versione 0.0.5 (26 Mag 2022)
-    * Tolto nome e cognome autore dal model messaggio
-    * Tolto campo categoria_tipologia dal model documento
-
-    ## Versione 0.0.4 (25 Mag 2022)
-    * Aggiunto filtro `id_conversazione`, msu endpoint Lista conversazioni
-    ## Versione 0.0.3 (20 Mag 2022)
-    * Aggiunto campo `modificato`, `data_modifica` e `autore_modifica` su model messaggio
-    ## Versione 0.0.2 (19 Mag 2022)
-    * tolto endpoint "cerca conversazione" , filtro argomento aggiunto su "Lista conversazioni"
-
-    ## Versione 0.0.1 (10 Mag 2022)
-    * Prima implementazione
-
+  version: 1.0.0
 paths:
   "/servizio-attivo":
     get:

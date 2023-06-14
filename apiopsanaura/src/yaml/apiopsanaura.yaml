@@ -1,34 +1,11 @@
 swagger: '2.0'
 host: HOST
-basePath: /
+basePath: /apiopsanaura/api/v1
 schemes:
   - https
 info:
   title: 'APIOPSANAURA - Servizi trasversali AURA'
-  version: 0.0.2
-  description: |
-
-    # Avvertenze
-    ---
-
-
-    # Domande
-    ---
-
-    # Prototipo Interfaccia
-    ---
-    https://rn5jxm.axshare.com/#g=1&p=indice
-
-    # Note
-    ---
-
-    ## Versione 0.0.2 (22 Set 2022)
-    * Modifica API GetAssistiti (/esenzioni-patologia)
-    * Modifica API GetListaEsenzioniPatologia (/esenzioni-patologia)
-
-    ## Versione 0.0.1 (17 Giu 2022)
-    * Prima implementazione
-
+  version: 1.0.0
 paths:
   '/assistiti':
     get:
@@ -39,7 +16,7 @@ paths:
 
         * La paginazione viene effettuata tramite la query n_pagina e un header che contiene il numero totale di pagine in base ai filtri di ricerca alla paginazione "X-Total-Pages" . Sono presenti anche altri query params della request opzionali che permettono di filtrare maggiormente la lista dei risultati
 
-        * La ricerca per nome può essere effettuata solo se è presente anche il cognome
+        * La ricerca per nome puï¿½ essere effettuata solo se ï¿½ presente anche il cognome
 
       produces:
         - application/json
@@ -133,7 +110,7 @@ parameters:
     description: >-
       Contiene un id univoco (`uuid v4`) della chiamata HTTP che viene generato
       dal front-end, viene propagato agli strati successivi e viene restituito
-      al front-end assieme alla response, permettendo così di tracciare l'intero
+      al front-end assieme alla response, permettendo cosï¿½ di tracciare l'intero
       ciclo di vita della richiesta
     type: string
     required: true
@@ -143,7 +120,7 @@ parameters:
     description: |
       Contiene l'elenco degli ip che hanno gestito la richiesta.
       Utile per i log e l'audit.
-      Il formato della stringa è
+      Il formato della stringa ï¿½
       ```
       <ip-front-end>, <ip-primo-server>, ..., <ip-ultimo-server>
       ```
@@ -259,12 +236,12 @@ parameters:
     in: query
     name: 'eta_min'
     type: integer
-    description: L'età minima degli assistiti
+    description: L'etï¿½ minima degli assistiti
   query_eta_max_assistito:
     in: query
     name: 'eta_max'
     type: integer
-    description: L'età massima degli assistiti
+    description: L'etï¿½ massima degli assistiti
   query_sesso_assistito:
     in: query
     name: 'sesso'
@@ -437,8 +414,8 @@ parameters:
 responses:
   BadRequest:
     description:
-      La richiesta fatta dal client è errata. Ad esempio non sono stati passati
-      tutti i campi obbligatori, uno dei campi è di un tipo non valido,
+      La richiesta fatta dal client ï¿½ errata. Ad esempio non sono stati passati
+      tutti i campi obbligatori, uno dei campi ï¿½ di un tipo non valido,
       formattazione dei filtri errata ecc.
     headers:
       X-Request-ID:
@@ -459,7 +436,7 @@ responses:
       $ref: '#/definitions/errore'
   NotFound:
     description:
-      La risorsa cercata non è stata trovata. <br> Questo errore viene
+      La risorsa cercata non ï¿½ stata trovata. <br> Questo errore viene
       restituito quando si prova ad accedere alla singola risorsa e questa non
       esiste. <br> Nel caso in cui si prova ad ottenere una lista e non ci sono
       elementi, restituire 200 con un array vuoto
@@ -471,7 +448,7 @@ responses:
       $ref: '#/definitions/errore'
   InternalServerError:
     description:
-      Si è verificato un'errore interno del server. (es. null pointer exception,
+      Si ï¿½ verificato un'errore interno del server. (es. null pointer exception,
       connessione al DB saltata ecc)
     headers:
       X-Request-ID:
