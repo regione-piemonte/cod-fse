@@ -27,11 +27,13 @@ Apache 2.4.x
 Tipo di database
 PostgreSQL 12.2
 
-Contiene riferimenti a APICODOPSAN, APIOPSAN, APIOPSANAURA.
+Contiene riferimenti a [APICODOPSAN](https://github.com/regione-piemonte/cod-fse/tree/main/apicodopsan), [APIOPSAN](https://github.com/regione-piemonte/webappmed-fse/blob/main/apicodopsan), [APIOPSANAURA](https://github.com/regione-piemonte/cod-fse/tree/main/apiopsanaura).
 
 ## Installazione
 
-nvm use 10.23.2\nnpm install\nnpm run build:test
+nvm use 10.23.2
+npm install
+npm run build:test
 
 ## Versioning
 
