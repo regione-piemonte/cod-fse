@@ -17,7 +17,7 @@ Il prodotto Contatto Digitale è costituito dalle seguenti componenti software:
 | Componente |Descrizione  |Versione |
 |--|--|--|
 | [APICODOPSAN](apicodopsan) | API per la gestione delle comunicazioni da parte del medico verso il proprio paziente | 1.0.0 |
-| [APIOPSAN](https://github.com/regione-piemonte/webappmed-fse/blob/main/apicodopsan) | API trasversali per l'operatore sanitario per la consultazione dei documenti nel FSE | 1.0.0 |
+| [APIOPSAN](https://github.com/regione-piemonte/webappmed-fse/tree/main/apiopsan) | API trasversali per l'operatore sanitario per la consultazione dei documenti nel FSE | 1.0.0 |
 | [APIOPSANAURA](apiopsanaura) | API per l'integrazione con l'anagrafica regionale degli assistiti | 1.0.0 |
 | [CODCIT](codcit) | API per la gestione delle comunicazioni da parte del cittadino verso il proprio medico | 1.0.0 |
 | [DMACODBATCH](dmacodbatch) | API per la gestione degli assistiti di un medico e delle relative conversazioni | 1.0.0 |
