@@ -23,7 +23,7 @@ Il prodotto Contatto Digitale è costituito dalle seguenti componenti software:
 | [DMACODBATCH](dmacodbatch) | API per la gestione degli assistiti di un medico e delle relative conversazioni | 1.0.0 |
 | [PWACODMED](pwacodmed) | Web application dell'operatore sanitario | 1.0.0 |
 
-Le interfacce utente per il cittadino, implementate come Progressive Web App, sono disponibili sul prodotto [SANSOL](https://github.com/regione-piemonte/sansol/tree/main/sansolcontattodigit). La pwa richiama servizi JSON/REST disponibili sul prodotto [APISAN](https://github.com/regione-piemonte/apisan). La web application dell'operatore sanitario è resa disponibile mediante abilitazione effettuata sul prodotto [LCCE](https://github.com/regione-piemonte/lcce).
+Le interfacce utente per il cittadino, implementate come Progressive Web App, sono disponibili sul prodotto [SANSOL](https://github.com/regione-piemonte/sansol/tree/main/sansolcontattodigit). La pwa richiama servizi JSON/REST disponibili sul prodotto [APISAN](https://github.com/regione-piemonte/apisan/tree/master/apisancod). La web application dell'operatore sanitario è resa disponibile mediante abilitazione effettuata sul prodotto [LCCE](https://github.com/regione-piemonte/lcce).
 
 ## Prerequisiti di sistema
 
