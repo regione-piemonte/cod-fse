@@ -46,7 +46,7 @@ Il servizio consente a medico e cittadino di effettuare il download del pacchett
 Il prodotto dipende da Web Services del FSE regionale piemontese per la verifica del consenso alla consultazione da parte degli operatori sanitari.
 
 ### Sistema di autenticazione
-Il sistema di autenticazione con cui è protetta la web application PWACODMED è esterno al presente prodotto ed è basato sul sistema di Single Sign-On SHIBBOLETH.
+Il sistema di autenticazione con cui è protetta la web application [PWACODMED](pwacodmed) è esterno al presente prodotto ed è basato sul sistema di Single Sign-On SHIBBOLETH.
 
 ## Versioning
 
