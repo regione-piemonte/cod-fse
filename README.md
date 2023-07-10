@@ -20,7 +20,7 @@ Il prodotto Contatto Digitale è costituito dalle seguenti componenti software:
 | [APIOPSAN](https://github.com/regione-piemonte/webappmed-fse/tree/main/apiopsan) | API trasversali per l'operatore sanitario per la consultazione dei documenti nel FSE | 1.0.0 |
 | [APIOPSANAURA](apiopsanaura) | API per l'integrazione con l'anagrafica regionale degli assistiti | 1.0.0 |
 | [CODCIT](codcit) | API per la gestione delle comunicazioni da parte del cittadino verso il proprio medico | 1.0.0 |
-| [DMACODBATCH](dmacodbatch) | API per la gestione degli assistiti di un medico e delle relative conversazioni | 1.0.0 |
+| [DMACODBATCH](dmacodbatch) | API / batch per la gestione degli assistiti di un medico e delle relative conversazioni | 1.0.0 |
 | [PWACODMED](pwacodmed) | Web application dell'operatore sanitario | 1.0.0 |
 
 Le interfacce utente per il cittadino, implementate come Progressive Web App, sono disponibili sul prodotto [SANSOL](https://github.com/regione-piemonte/sansol/tree/main/sansolcontattodigit). La pwa richiama servizi JSON/REST disponibili sul prodotto [APISAN](https://github.com/regione-piemonte/apisan/tree/master/apisancod). La web application dell'operatore sanitario è resa disponibile mediante abilitazione effettuata sul prodotto [LCCE](https://github.com/regione-piemonte/lcce).
