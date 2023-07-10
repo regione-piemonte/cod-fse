@@ -8,7 +8,7 @@ APICODOPSAN
 
 ## Descrizione
 
-API dei servizi del Contatto Digitale esposti all'operatore sanitario.
+API per la gestione delle comunicazioni da parte del medico verso il proprio paziente.
 
 ## Prerequisiti di sistema
 
