@@ -8,7 +8,7 @@ CODCIT
 
 ## Descrizione
 
- API dei servizi del Contatto Digitale esposti al cittadino.
+API per la gestione delle comunicazioni da parte del cittadino verso il proprio medico.
 
 ## Prerequisiti di sistema
 
