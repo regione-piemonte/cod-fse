@@ -8,7 +8,7 @@ APIOPSANAURA
 
 ## Descrizione
 
-API di orchestrazione dei servizi AURA esposti all'operatore sanitario.
+API per l'integrazione con l'anagrafica regionale degli assistiti.
 
 ## Prerequisiti di sistema
 
