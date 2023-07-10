@@ -8,7 +8,7 @@ PWACODMED
 
 ## Descrizione
 
-PWA del Contatto Digitale.
+Web application dell'operatore sanitario.
 
 ## Prerequisiti di sistema
 
