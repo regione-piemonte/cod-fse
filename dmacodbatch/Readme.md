@@ -8,7 +8,7 @@ DMACODBATCH
 
 ## Descrizione
 
-Batch per la cancellazione di messaggi e conversazioni scadute e per la disabilitazione degli assistiti per il cambio del medico.
+API / batch per la gestione degli assistiti di un medico e delle relative conversazioni.
 
 ## Prerequisiti di sistema
 
